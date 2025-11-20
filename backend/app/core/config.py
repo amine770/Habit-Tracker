@@ -13,3 +13,10 @@ class Settings(BaseSettings):
     model_config = {
         "env_file" : ".env"
     }
+
+    @property
+    def database_url(self) -> str:
+        return (
+            f"postgresql+psycopg2://{self.database_username}:{self.database_password}"
+            f"@{self.database_hostname}:{self.database_port}/{self.database_name}"
+        )
