@@ -1,7 +1,6 @@
 from sqlalchemy.orm import declarative_base
 
-class Base(declarative_base):
-    pass 
+Base = declarative_base()
 
 from app.models.user import *
 from app.models.group import *
