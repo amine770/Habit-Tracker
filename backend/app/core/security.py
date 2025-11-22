@@ -3,11 +3,11 @@ from app.schemas.token import TokenData
 from fastapi import Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from jose import JWTError, jwt
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from app.core.config import Settings
 from app.db.session import get_db
 from fastapi.security import OAuth2PasswordBearer
-from app.models import user as User
+from app.models.user import User
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
@@ -23,9 +23,10 @@ def verify_password(plain_password, hashed_password):
 
 def create_token(data: dict):
     to_encode = data.copy()
-    expire = datetime.utcnow() + timedelta(minutes=settings.access_token_expire_minutes)
+    now = datetime.now(timezone.utc)
+    expire = now + timedelta(minutes=settings.access_token_expire_minutes)
     to_encode.update({"exp": int(expire.timestamp())})
-    to_encode.update({"iat": int(datetime.utcnow().timestamp())})
+    to_encode.update({"iat": int(now.timestamp())})
 
     encoded_jwt = jwt.encode(to_encode, settings.secret_key, algorithm=settings.algorithm)
     return encoded_jwt
@@ -45,8 +46,7 @@ def get_current_user(token : str = Depends(oauth2_scheme), db : Session = Depend
         raise credentials_exception 
     
     user = db.query(User).filter(User.id == token_data.id).first()
-    if not user:
-        
+    if not user:        
         raise credentials_exception
     return user
 
