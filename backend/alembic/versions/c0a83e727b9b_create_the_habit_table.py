@@ -30,9 +30,9 @@ def upgrade() -> None:
         sa.Column("frequency", sa.String, server_default="daily", nullable=False),
         sa.Column("color", sa.String, nullable=False, server_default="blue"),
         sa.Column("icon", sa.String, nullable=True),
-        sa.Column("is_active", sa.Boolean, nullable=False, server_default=True),
+        sa.Column("is_active", sa.Boolean, nullable=False, server_default=text("true")),
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=text("now()"), nullable=False),
-        sa.Column("updated_at", sa.DateTime(timezone=True), server_default=text("now()"), nullable=False),
+        sa.Column("updated_at", sa.DateTime(timezone=True), server_default=text("now()"), nullable=False)
     )
 
 
