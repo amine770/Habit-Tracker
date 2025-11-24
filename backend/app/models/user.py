@@ -14,4 +14,4 @@ class User(Base):
     hashed_password = Column(String, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=text("now()"), nullable=False)
 
-    habit = relationship("Habit", back_populates="user")
+    habits = relationship("Habit", back_populates="user", cascade="all, delete-orphan")
