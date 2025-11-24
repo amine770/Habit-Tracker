@@ -10,7 +10,7 @@ class HabitServices:
         habit = Habit(**data.dict(), user_id = user_id)
         db.add(habit)
         db.commit()
-        db.refresh()
+        db.refresh(habit)
         return habit
     
     @staticmethod
