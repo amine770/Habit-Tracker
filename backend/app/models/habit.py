@@ -1,6 +1,7 @@
 from sqlalchemy import String, Integer, Column, Text, ForeignKey, DateTime, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.expression import text
+from sqlalchemy.sql import func
 from app.db.session import Base
 
 class Habit(Base):
@@ -14,7 +15,7 @@ class Habit(Base):
     color = Column(String, server_default="blue")
     icon = Column(String, nullable=True)
     is_active = Column(Boolean, server_default=text("true"))
-    created_at = Column(DateTime(timezone=True), server_default=text("now()"))
-    update_at = Column(DateTime(timezone=True), server_default=text("now()"))
+    created_at = Column(DateTime(timezone=True), server_default=text("now()"), nullable=False)
+    updated_at = Column(DateTime(timezone=True), server_default=text("now()"), onupdate=func.now(), nullable=False)
 
-    user = relationship("User", back_populates="habits")
+    user = relationship("User")
