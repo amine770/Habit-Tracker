@@ -19,3 +19,4 @@ class Habit(Base):
     updated_at = Column(DateTime(timezone=True), server_default=text("now()"), onupdate=func.now(), nullable=False)
 
     user = relationship("User")
+    logs = relationship("HabitLog", back_populates="habit")
