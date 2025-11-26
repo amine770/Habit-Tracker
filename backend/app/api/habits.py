@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends, status
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.schemas.habit import HabitResponse, HabitCreate, HabitUpdate
 from app.schemas.user import UserInDBBase
@@ -15,26 +15,24 @@ def create_habit(habit : HabitCreate, user : UserInDBBase = Depends(get_current_
     return HabitServices.create_habit(db, user.id, habit)
 
 @router.get("", response_model=List[HabitResponse])
-def get_user_habits(user : UserInDBBase = Depends(get_current_user), db : Session = Depends(get_db)):
-    return HabitServices.get_user_habits(db, user.id)
+def get_user_habits(
+    limit: int = 1,
+    is_active: bool | None = None,
+    user: UserInDBBase = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    return HabitServices.get_user_habits(db, user.id, is_active, limit)
 
 
 @router.get("/{id}", response_model=HabitResponse)
-def get_habit_by_id(id: int, user : UserInDBBase = Depends(get_current_user), db : Session = Depends(get_db)):
-    habit = HabitServices.get_habit_by_id(db, id)
-    if not habit or habit.user_id != user.id:
-        raise HTTPException(status_code=404, detail="Habit not found")
-    return habit
+def get_habit_by_id(id: int, user: UserInDBBase = Depends(get_current_user), db: Session = Depends(get_db)):
+    return HabitServices.get_habit_by_id(db, user.id, id)
 
 @router.put("/{id}", response_model=HabitResponse)
-def update_habit(id : int, data : HabitUpdate,user : UserInDBBase = Depends(get_current_user), db : Session = Depends(get_db)):
-    habit = db.query(Habit).filter(Habit.id == id).first()
-    return HabitServices.update_habit(db, id, data, habit)
+def update_habit(id: int, data: HabitUpdate, user: UserInDBBase = Depends(get_current_user), db: Session = Depends(get_db)):
+    return HabitServices.update_habit(db, user.id, id, data)
 
 @router.delete("/{id}")
-def delete_habit(id: int, user : UserInDBBase = Depends(get_current_user), db : Session = Depends(get_db)):
-    habit = db.query(Habit).filter(Habit.id == id).first()
-    if not habit or habit.user_id != user.id:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="habit not found")
-    HabitServices.delete_habit(db, habit)
-    return {"message" : "habit deleted successfully"}
+def delete_habit(id: int, user: UserInDBBase = Depends(get_current_user), db: Session = Depends(get_db)):
+    HabitServices.delete_habit(db, user.id, id)
+    return {"message": "habit deleted successfully"}
