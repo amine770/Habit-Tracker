@@ -16,7 +16,7 @@ def create_habit(habit : HabitCreate, user : UserInDBBase = Depends(get_current_
 
 @router.get("", response_model=List[HabitResponse])
 def get_user_habits(
-    limit: int = 1,
+    limit: int = 10,
     is_active: bool | None = None,
     user: UserInDBBase = Depends(get_current_user),
     db: Session = Depends(get_db)
