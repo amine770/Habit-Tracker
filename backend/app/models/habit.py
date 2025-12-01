@@ -20,5 +20,5 @@ class Habit(Base):
     updated_at = Column(DateTime(timezone=True), server_default=text("now()"), onupdate=func.now(), nullable=False)
 
     user = relationship("User")
-    logs = relationship("HabitLog", back_populates="habit")
-    group = relationship("Group", back_populates="habit")
+    logs = relationship("HabitLog", back_populates="habit", cascade="all, delete-orphan")
+    group = relationship("Group", back_populates="habits")
