@@ -9,6 +9,7 @@ class HabitBase(BaseModel):
     color : str = "blue"
     icon : Optional[str] = None
     is_active : bool = True
+    group_id : int = None
 
 class HabitCreate(HabitBase):
     pass
@@ -21,6 +22,7 @@ class HabitUpdate(HabitBase):
     color : Optional[str] = None
     icon : Optional[str] = None
     is_active : Optional[bool] = None
+    group_id : Optional[int] = None
 
 
 class HabitInDB(HabitBase):

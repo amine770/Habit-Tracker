@@ -22,7 +22,7 @@ def upgrade() -> None:
     op.create_table("groups",
                     sa.Column("id", sa.Integer, primary_key=True, nullable=False),
                     sa.Column("name", sa.String, unique=True, nullable=False),
-                    sa.Column("description", sa.Text, nullable=False),
+                    sa.Column("description", sa.Text, nullable=True),
                     sa.Column("user_id", sa.Integer, sa.ForeignKey("users.id", ondelete="cascade"), nullable=False)
                     )
 
