@@ -9,6 +9,7 @@ class Habit(Base):
 
     id = Column(Integer, nullable= False, primary_key= True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="cascade"), nullable= False)
+    group_id = Column(Integer, ForeignKey("groups.id", ondelete="cascade"), nullable=False)
     name = Column(String, nullable= False, unique= True)
     description = Column(Text, nullable= True )
     frequency = Column(String, server_default="daily")
@@ -20,3 +21,4 @@ class Habit(Base):
 
     user = relationship("User")
     logs = relationship("HabitLog", back_populates="habit")
+    group = relationship("Group", back_populates="habit")
