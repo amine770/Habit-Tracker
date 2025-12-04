@@ -1,10 +1,11 @@
 from fastapi import HTTPException, status
-from sqlalchemy import Date, cast 
+from sqlalchemy import Date, cast, func
 from sqlalchemy.orm import Session
 from app.models.habit_log import HabitLog
 from app.models.habit import Habit
 from app.schemas.habit_log import LogCreate
 from datetime import date
+
 
 class LogsServices:
     @staticmethod
@@ -43,5 +44,5 @@ class LogsServices:
         return( db.query(HabitLog)
                .join(Habit)
                .filter(Habit.user_id == current_user_id)
-               .filter(HabitLog.completed_at>=start, HabitLog.completed_at<=end).all()
+               .filter(func.date(HabitLog.completed_at)>=start, func.date(HabitLog.completed_at)<=end).all()
                )

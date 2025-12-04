@@ -1,4 +1,5 @@
 from fastapi import HTTPException, status
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 from app.schemas.group import GroupCreate, GroupUpdate, HabitSummary
 from app.models.group import Group
@@ -64,13 +65,12 @@ class GroupServices:
 
     @staticmethod    
     def compute_streak(db: Session, habit: Habit):
-        logs = db.query(HabitLog).filter(HabitLog.habit_id == habit.id).order_by(HabitLog.completed_at).all()
-        
+        logs = db.query(HabitLog).filter(HabitLog.habit_id == habit.id).order_by(HabitLog.completed_at.desc()).all()
         
         streak = 0
         cur_day = date.today()
         for log in logs:
-            if log.completed_at == cur_day:
+            if log.completed_at.date() == cur_day:
                 counter += 1
                 cur_day = cur_day.replace(day=cur_day.day -1 )
             else:
@@ -80,7 +80,7 @@ class GroupServices:
     @staticmethod
     def completion_rate(db: Session, habit: Habit):
         thirty_days_ago = datetime.now() - timedelta(days=30)
-        num_logs = db.query(HabitLog).filter(HabitLog.habit_id == habit.id, HabitLog.completed_at >= thirty_days_ago).count()
+        num_logs = db.query(HabitLog).filter(HabitLog.habit_id == habit.id, func.date(HabitLog.completed_at) >= thirty_days_ago).count()
 
         return (num_logs * 30)/100
     
