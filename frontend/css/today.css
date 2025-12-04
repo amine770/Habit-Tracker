@@ -1,0 +1,115 @@
+/* daily Progress */
+.daily-progress {
+    min-width: 60%;
+    background-color: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.progress-text {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+/* progress circle */
+.progress-circle {
+    position: relative;
+    width: 120px;
+    height: 120px;
+}
+
+.progress-circle svg {
+    transform: rotate(-90deg);
+}
+
+.progress-bg {
+    fill: none;
+    stroke: var(--bg-hover);
+    stroke-width: 8;
+}
+
+.progress-bar {
+    fill: none;
+    stroke: var(--accent-blue);
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 314; /*2 * pi * radius(howa 50)*/ 
+    stroke-dashoffset: calc(314 - (314 * var(--progress)) / 100);
+    transition: stroke-dashoffset 0.3s ease;
+}
+
+.progress-percentage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+/* habits section */
+.habits-section {
+    min-width: 60%;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.habits-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.habit-card {
+    background-color: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-md);
+    display: grid;
+    grid-template-columns: auto auto 1fr auto;
+    align-items: center;
+    gap: var(--spacing-sm);
+    border-left: 4px solid transparent;
+    transition: all 0.2s;
+}
+
+.habit-card:hover {
+    background-color: var(--bg-hover);
+}
+
+.habit-card:has(.checkbox-input:checked){
+    opacity: 0.6;
+}
+
+.habit-emoji {
+    font-size: 1.5rem;
+}
+
+.habit-name {
+    font-size: 1.1rem;
+    color: var(--text-primary);
+}
+
+.habit-menu {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: var(--spacing-xs);
+    border-radius: var(--radius-sm);
+    transition: background-color 0.2s;
+}
+
+.habit-menu:hover {
+    background-color: orange;
+    color: var(--text-primary);
+}
